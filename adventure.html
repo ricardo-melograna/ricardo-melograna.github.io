@@ -1,0 +1,240 @@
+<head>
+    <title>A Aventura</title> <!-- Título da guia do navegador -->
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Altura total da tela */
+            margin: 0; /* Remove margens padrão */
+        }
+    </style>
+    <script>
+        let espadaRoubada = false; // Variável para rastrear se a espada foi roubada
+
+        function limparTela() {
+            // Remove todos os elementos filhos do body
+            document.body.innerHTML = '';
+        }
+
+        function mostrarTexto() {
+            limparTela(); // Limpa a tela antes de mostrar o novo texto
+
+            const texto = document.createElement('p');
+            texto.innerText = "Ao oeste tem um deserto, ao sul tem um rio, ao leste tem uma ponte pra atravessar um rio e ao norte tem um vulcão."; // Texto combinado
+            document.body.appendChild(texto);
+            
+            const h1 = document.createElement('h1');
+            h1.innerText = "Bem-vindo à Aventura!"; // Mensagem de boas-vindas
+            document.body.appendChild(h1); // Adiciona a mensagem de boas-vindas
+            
+            // Criação dos novos botões
+            criarBotao("Ir para o norte", irParaONorte);
+            criarBotao("Ir ao oeste", irAoOeste); // Adicionando a função ao botão "Ir ao oeste"
+            criarBotao("Ir ao sul", irAoSul); // Adicionando a função ao botão "Ir ao sul"
+            criarBotao("Ir ao leste", irAoLeste); // Adicionando a função ao botão "Ir ao leste"
+        }
+
+        function irParaONorte() {
+            limparTela(); // Limpa a tela antes de mostrar o novo texto
+
+            const textoVulcao = document.createElement('p');
+            textoVulcao.innerText = "O vulcão está bloqueando todo o caminho."; // Mensagem do vulcão
+            document.body.appendChild(textoVulcao);
+            
+            // Criação dos novos botões
+            criarBotao("Entrar no vulcão", function() {
+                alert("Você morreu pela lava."); // Mensagem ao entrar no vulcão
+                mostrarTexto(); // Reinicia o jogo
+            });
+            criarBotao("Voltar para a escolha", mostrarTexto);
+        }
+
+        function irAoSul() {
+            limparTela(); // Limpa a tela antes de mostrar o novo texto
+
+            const textoRio = document.createElement('p');
+            textoRio.innerText = "O rio está bloqueando o caminho."; // Mensagem do rio
+            document.body.appendChild(textoRio);
+            
+            // Criação dos novos botões
+            criarBotao("Tentar pular o rio", function() {
+                alert("Você tentou pular o rio, mas não conseguiu!"); // Mensagem ao tentar pular
+                mostrarTexto(); // Reinicia o jogo
+            });
+            criarBotao("Voltar para a escolha", mostrarTexto);
+        }
+
+        function irAoOeste() {
+            limparTela(); // Limpa a tela antes de mostrar o novo texto
+
+            const textoCidade = document.createElement('p');
+            textoCidade.innerText = "Você vê uma cidade do velho oeste perto de você."; // Mensagem da cidade
+            document.body.appendChild(textoCidade);
+            
+            // Criação dos novos botões
+            criarBotao("Continuar no deserto", function() {
+                alert("Você morreu de calor."); // Mensagem ao continuar no deserto
+                mostrarTexto(); // Reinicia o jogo
+            });
+            criarBotao("Entrar na cidade do velho oeste", function() {
+                entrarNaCidade(); // Chama a função para entrar na cidade
+            });
+            criarBotao("Voltar para a escolha", mostrarTexto);
+        }
+
+        function entrarNaCidade() {
+            limparTela(); // Limpa a tela antes de mostrar o novo texto
+
+            const textoEspada = document.createElement('p');
+            textoEspada.innerText = "Você tem vontade de roubar uma espada."; // Mensagem sobre a espada
+            document.body.appendChild(textoEspada);
+            
+            // Criação dos novos botões
+            criarBotao("Roubar a espada", function() {
+                espadaRoubada = true; // Marca que a espada foi roubada
+                alert("Você roubou a espada!"); // Mensagem ao roubar a espada
+                mostrarTexto(); // Reinicia o jogo
+            });
+            criarBotao("Voltar para a escolha", mostrarTexto);
+        }
+
+        function irAoLeste() {
+            limparTela(); // Limpa a tela antes de mostrar o novo texto
+
+            const textoTroll = document.createElement('p');
+            textoTroll.innerText = "Um troll está bloqueando a ponte e o troll diz 'Passe essa ponte se resolver 3 charadas'"; // Texto do troll
+            document.body.appendChild(textoTroll);
+            
+            // Criação dos novos botões
+            criarBotao("Resolver as charadas", resolverCharadas);
+            criarBotao("Matar troll", function() {
+                if (espadaRoubada) {
+                    limparTela(); // Limpa a tela antes de mostrar a nova mensagem
+                    const textoMatarTroll = document.createElement('p');
+                    textoMatarTroll.innerText = "Você matou o troll e passou da ponte. Depois apareceu um portal dizendo 'Fale, amigo, e entre'"; 
+                    document.body.appendChild(textoMatarTroll);
+                    portal(); // Chama a função do portal
+                } else {
+                    alert("Você não tem nada para matá-lo."); // Mensagem de alerta se a espada não foi roubada
+                    // Não limpa a tela, apenas retorna à tela anterior
+                }
+            });
+            criarBotao("Voltar para a escolha", mostrarTexto);
+        }
+
+        function portal() {
+            const textoPortal = document.createElement('p');
+            textoPortal.innerText = "Fale, amigo, e entre."; // Mensagem do portal
+            document.body.appendChild(textoPortal);
+            
+            const inputResposta = document.createElement('input');
+            inputResposta.placeholder = "Digite sua resposta aqui"; // Placeholder para a resposta
+            document.body.appendChild(inputResposta);
+            
+            // Botão para verificar a resposta
+            criarBotao("Verificar resposta", function() {
+                if (inputResposta.value.toLowerCase() === "amigo") {
+                    alert("Continua"); // Mensagem de sucesso
+                    jogarDeNovo(); // Chama a função para jogar de novo
+                } else {
+                    alert("Resposta incorreta! Tente novamente."); // Mensagem de erro
+                }
+            });
+        }
+
+        function jogarDeNovo() {
+            limparTela(); // Limpa a tela antes de mostrar o novo texto
+
+            const textoFinal = document.createElement('p');
+            textoFinal.innerText = "Você completou a aventura!"; // Mensagem final
+            document.body.appendChild(textoFinal);
+            
+            // Botão para jogar de novo
+            criarBotao("Jogar de novo", mostrarTexto);
+        }
+
+        function resolverCharadas() {
+            limparTela(); // Limpa a tela antes de mostrar o novo texto
+
+            const pergunta = document.createElement('p');
+            pergunta.innerText = "Quem casou muitas vezes mas não tem esposa?"; // Pergunta da charada
+            document.body.appendChild(pergunta);
+            
+            const inputResposta = document.createElement('input');
+            inputResposta.placeholder = "Digite sua resposta aqui"; // Placeholder para a resposta
+            document.body.appendChild(inputResposta);
+            
+            // Botão para verificar a resposta
+            criarBotao("Verificar resposta", function() {
+                if (inputResposta.value.toLowerCase() === "o padre") {
+                    novaCharada(); // Chama a nova charada se a resposta estiver correta
+                } else {
+                    alert("Resposta incorreta! Tente novamente.");
+                }
+            });
+            
+            // Botão para voltar à escolha
+            criarBotao("Voltar para a escolha", mostrarTexto);
+        }
+
+        function novaCharada() {
+            limparTela(); // Limpa a tela antes de mostrar a nova charada
+
+            const novaPergunta = document.createElement('p');
+            novaPergunta.innerText = "Quanto mais se tira fica maior, quanto mais se bota fica menor?"; // Nova charada
+            document.body.appendChild(novaPergunta);
+            
+            const inputNovaResposta = document.createElement('input');
+            inputNovaResposta.placeholder = "Digite sua resposta aqui"; // Placeholder para a nova resposta
+            document.body.appendChild(inputNovaResposta);
+            
+            // Botão para verificar a nova resposta
+            criarBotao("Verificar resposta", function() {
+                if (inputNovaResposta.value.toLowerCase() === "um buraco qualquer") {
+                    ultimaCharada(); // Chama a última charada se a resposta estiver correta
+                } else {
+                    alert("Resposta incorreta! Tente novamente.");
+                }
+            });
+            
+            // Botão para voltar à escolha
+            criarBotao("Voltar para a escolha", mostrarTexto);
+        }
+
+        function ultimaCharada() {
+            limparTela(); // Limpa a tela antes de mostrar a última charada
+
+            const ultimaPergunta = document.createElement('p');
+            ultimaPergunta.innerText = "O que é pequeno, quadrado e amarelo?"; // Última charada
+            document.body.appendChild(ultimaPergunta);
+            
+            const inputUltimaResposta = document.createElement('input');
+            inputUltimaResposta.placeholder = "Digite sua resposta aqui"; // Placeholder para a última resposta
+            document.body.appendChild(inputUltimaResposta);
+            
+            // Botão para verificar a última charada
+            criarBotao("Verificar charada", function() {
+                alert("Resposta incorreta! Tente novamente."); // Mensagem informativa
+            });
+            
+            // Botão para voltar à escolha
+            criarBotao("Voltar para a escolha", mostrarTexto);
+        }
+
+        function criarBotao(texto, funcao) {
+            const botao = document.createElement('button');
+            botao.innerText = texto;
+            if (funcao) {
+                botao.onclick = funcao; // Adiciona a função ao botão, se fornecida
+            }
+            document.body.appendChild(botao);
+        }
+    </script>
+</head>
+<body>
+    <h1>Bem-vindo à Aventura!</h1> <!-- Mensagem de boas-vindas -->
+    <button onclick="mostrarTexto()">Entrar no mundo</button>
+</body>
+<!-- ... código existente ... -->
